@@ -15,8 +15,7 @@ public:
     // null null   4   5
     //
     // 1,2,3,#,#,4,5
-    // Node at index i will have children at index 2*i+1 and 2*i + 2
-    
+
     
     
 
