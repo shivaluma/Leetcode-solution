@@ -1,3 +1,4 @@
+
 /**
  * Definition for singly-linked list.
  * struct ListNode {
@@ -11,29 +12,29 @@
 class Solution {
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        ListNode* headAns = new ListNode(0);
-        ListNode* tailAns = headAns;
-
-        while (lists.size()) {
-            int minIdx = 0;
-            for (int i = 0; i < lists.size(); i++) {  
-                
-                if (!lists[i]) {
-                    lists.erase(lists.begin() + i);
-                }
-                
-                if (lists[i] && lists[i]->val < lists[minIdx]->val) {
-                    minIdx = i;
-                }
+        
+        if(lists.size() == 0)
+            return NULL;
+        
+        priority_queue<int, vector<int>, greater<int>> pq;
+        
+        for(int i = 0; i < lists.size(); i++){
+            ListNode* temp = lists[i];
+            while(temp){
+                pq.push(temp->val);
+                temp = temp->next;
             }
-            
-           
-            
-            tailAns->next = lists[minIdx];
-            if (lists[minIdx]) lists[minIdx] = lists[minIdx]->next;
-            if (tailAns->next) tailAns = tailAns->next;
         }
         
-        return headAns->next;
+        ListNode *temp, *head;
+        temp = head = new ListNode();
+        while(!pq.empty()){
+            ListNode* x = new ListNode(pq.top());
+            pq.pop();
+            temp->next = x;
+            temp = temp->next;
+                
+        }
+        return head->next;
     }
 };
