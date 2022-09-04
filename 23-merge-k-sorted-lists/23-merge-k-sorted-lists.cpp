@@ -11,29 +11,31 @@
 class Solution {
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
-        ListNode* headAns = new ListNode(0);
-        ListNode* tailAns = headAns;
-
-        while (lists.size()) {
-            int minIdx = 0;
-            for (int i = 0; i < lists.size(); i++) {  
-                
-                if (!lists[i]) {
-                    lists.erase(lists.begin() + i);
-                }
-                
-                if (lists[i] && lists[i]->val < lists[minIdx]->val) {
-                    minIdx = i;
+        ListNode* res = nullptr;
+        ListNode* curr = nullptr;
+        while(lists.size()){
+            int idx = 0;
+            if(!lists[idx]) {
+                lists.erase(lists.begin() + idx);
+                continue;
+            }
+            for(int i = 1; i < lists.size(); i++){
+                if(lists[i] && lists[idx]->val > lists[i]->val) {
+                    idx = i;
                 }
             }
-            
-           
-            
-            tailAns->next = lists[minIdx];
-            if (lists[minIdx]) lists[minIdx] = lists[minIdx]->next;
-            if (tailAns->next) tailAns = tailAns->next;
+                        
+            if(!curr) curr = lists[idx];
+            else { 
+                curr->next = lists[idx];
+                curr = curr->next;
+            }
+            if(!res) res = curr;
+
+            if(lists[idx]) lists[idx] = lists[idx]->next;
+            if(lists[idx] == nullptr) lists.erase(lists.begin() + idx);
         }
         
-        return headAns->next;
+        return res;
     }
 };
