@@ -55,11 +55,8 @@ public:
         }
         else        
         {
-
-            
             for (int j = i + 1 ; j < s1.size() ; j ++)
             {
-                
                 if (s1[j] == s2[i] && s1[i] != s2[i] && s1[j] != s2[j] && s1[i] == s2[j])
                 {
                     swap(s1[i] , s1[j]);
@@ -67,7 +64,10 @@ public:
                     swap(s1[i] , s1[j]);
                     return;
                 }
-                
+            }
+            
+            for (int j = i + 1 ; j < s1.size() ; j ++)
+            {
                 if (s1[j] == s2[i] && s1[i] != s2[i] && s1[j] != s2[j])
                 {
                     swap(s1[i] , s1[j]);
