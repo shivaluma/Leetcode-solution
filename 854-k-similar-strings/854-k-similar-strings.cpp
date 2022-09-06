@@ -55,8 +55,11 @@ public:
         }
         else        
         {
+
+            
             for (int j = i + 1 ; j < s1.size() ; j ++)
             {
+                
                 if (s1[j] == s2[i] && s1[i] != s2[i] && s1[j] != s2[j] && s1[i] == s2[j])
                 {
                     swap(s1[i] , s1[j]);
@@ -64,10 +67,7 @@ public:
                     swap(s1[i] , s1[j]);
                     return;
                 }
-            }
-            
-            for (int j = i + 1 ; j < s1.size() ; j ++)
-            {
+                
                 if (s1[j] == s2[i] && s1[i] != s2[i] && s1[j] != s2[j])
                 {
                     swap(s1[i] , s1[j]);
@@ -84,8 +84,6 @@ public:
     
     
     int kSimilarity(string s1, string s2) {
-        vector<int> min_count(22 , INT_MAX);
-        unordered_set<string> k;
         dfs(s1 , s2 , 0 , 0);
         return ans;
     }
