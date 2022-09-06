@@ -12,27 +12,17 @@
 class Solution {
 public:
     TreeNode* pruneTree(TreeNode* root) {
+        if (root == NULL) return NULL;
         
-        int sum = sumFromNode(root);
+        root->left = pruneTree(root->left);
+        root->right = pruneTree(root->right);
         
-        if (sum == 0) return NULL;
+        if (root->val == 0 && root->left == NULL && root->right == NULL) {
+            return NULL;
+        }
         
         return root;
     }
     
-    
-    
-    int sumFromNode(TreeNode* root) {
-        if (root == NULL) return 0;
-        
-        
-        int sumLeft = sumFromNode(root->left);
-        if (sumLeft == 0) root->left = NULL;
-        
-        int sumRight = sumFromNode(root->right);
-        if (sumRight == 0) root->right = NULL;
-        
-        
-        return root->val + sumLeft + sumRight;
-    }
+
 };
