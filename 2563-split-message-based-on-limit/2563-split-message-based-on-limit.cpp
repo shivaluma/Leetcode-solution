@@ -1,50 +1,47 @@
 class Solution {
 public:
+    int digits(int n) {
+        int cnt = 0;
+        while (n) {
+            n /= 10;
+            cnt++;
+        }
+        return cnt;
+    }
     vector<string> splitMessage(string message, int limit) {
-        vector<int>dig(10001),cum_sum(10001);// contains number of digits in N and cumulative sum of number of digits.
-        // find number of digits in X.
-        auto number_of_digits=[](int x){
-            int ret = 0;
-            while(x){
-                ret++;
-                x/=10;
+        int n = message.size();
+        for (int length = 1; length * 2 + 3 < limit; ++length) {
+            int cnt = (pow(10, length) - 1);
+            int available = cnt * limit;
+            available -= 3 * cnt;
+            available -= length * cnt;
+            for (int i = 1; i <= length; ++i) {
+                available -= i * (pow(10, i) - pow(10, i - 1));
             }
-            return ret;
-        };
-        for(int i=1;i<=10000;i++){
-            dig[i] = number_of_digits(i); 
-            cum_sum[i] = cum_sum[i-1]+dig[i];
+            if (available >= n) return generate(message, limit, length);
         }
         
-        int actual_size = message.size();
-        vector<string>ret;
-        for(int N=1;N<=actual_size;N++){
-            int newSize = actual_size+3*N+dig[N]*N+cum_sum[N];
-            
-            //check if possible to achieve the result.
-            if((newSize+limit-1)/limit==N){
-                string s;
-                int cur = 1;
-                //for each part we need to add <a/b> with it
-                int extra = dig[N]+3;//as a part changes we do it in runtime
-                for(char&c:message){
-                    s+=c;
-                    if(s.size()+dig[cur]+extra==limit){
-                        s+="<"+to_string(cur)+"/"+to_string(N)+">";
-                        ret.push_back(s);
-                        s.clear();
-                        cur++;
-                    }
-                }
-                //if last part contains less than limit characters.
-                if(s.size()){
-                      s+="<"+to_string(cur)+"/"+to_string(N)+">";
-                        ret.push_back(s);
-                        s.clear();
-                }
-                return ret;
-            }
+        return {};
+    }
+    vector<string> generate(string& message, int limit, int length) {
+        int n = message.size();
+        vector<string> res;
+        int index = 0;
+        int cnt = 1;
+        while (index < n) {
+            int remain = limit - 3;
+            remain -= digits(cnt);
+            remain -= length;
+            int extract = min(remain, n - index);
+            string temp = message.substr(index, extract) + "<" + to_string(cnt) + "/";
+            res.push_back(temp);
+            index += extract;
+            cnt++;
         }
-        return ret;
+        string blockCnt = to_string(cnt - 1);
+        for (auto& word : res) {
+            word += blockCnt + ">";
+        }
+        return res;
     }
 };
