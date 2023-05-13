@@ -1,47 +1,37 @@
+
 class Solution {
-public:
-    int digits(int n) {
-        int cnt = 0;
-        while (n) {
-            n /= 10;
-            cnt++;
-        }
-        return cnt;
-    }
-    vector<string> splitMessage(string message, int limit) {
-        int n = message.size();
-        for (int length = 1; length * 2 + 3 < limit; ++length) {
-            int cnt = (pow(10, length) - 1);
-            int available = cnt * limit;
-            available -= 3 * cnt;
-            available -= length * cnt;
-            for (int i = 1; i <= length; ++i) {
-                available -= i * (pow(10, i) - pow(10, i - 1));
-            }
-            if (available >= n) return generate(message, limit, length);
-        }
-        
+ public:
+  vector<string> splitMessage(string message, int limit) {
+    const int kMessageLength = message.length();
+    int b = 1;
+    // Total length of a. Initialized with the length of "1".
+    int aLength = sz(1);
+
+    // Total length of b := b * sz(b)
+    // Total length of "</>" := b * 3
+    while (b * limit < b * (sz(b) + 3) + aLength + kMessageLength) {
+      // If the length the last suffix "<b/b>" := sz(b) * 2 + 3 >= limit,
+      // then it's impossible that the length of "*<b/b>" <= limit.
+      if (sz(b) * 2 + 3 >= limit)
         return {};
+      aLength += sz(++b);
     }
-    vector<string> generate(string& message, int limit, int length) {
-        int n = message.size();
-        vector<string> res;
-        int index = 0;
-        int cnt = 1;
-        while (index < n) {
-            int remain = limit - 3;
-            remain -= digits(cnt);
-            remain -= length;
-            int extract = min(remain, n - index);
-            string temp = message.substr(index, extract) + "<" + to_string(cnt) + "/";
-            res.push_back(temp);
-            index += extract;
-            cnt++;
-        }
-        string blockCnt = to_string(cnt - 1);
-        for (auto& word : res) {
-            word += blockCnt + ">";
-        }
-        return res;
+
+    vector<string> ans;
+
+    for (int i = 0, a = 1; a <= b; ++a) {
+      // Length of "<a/b>" := sz(a) + sz(b) + 3
+      const int j = limit - (sz(a) + sz(b) + 3);
+      ans.push_back(message.substr(i, j) + "<" + to_string(a) + "/" +
+                    to_string(b) + ">");
+      i += j;
     }
+
+    return ans;
+  }
+
+ private:
+  int sz(int num) {
+    return to_string(num).length();
+  }
 };
